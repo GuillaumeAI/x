@@ -1,0 +1,22 @@
+{
+  "name": "giax",
+  "version": "0.0.1",
+  "description": "DESCRIBE",
+  "main": "index.js",
+  "scripts": {
+    "test": "MYTESTCMD"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuillaumeAI/x.git"
+  },
+  "keywords": [
+    "gia"
+  ],
+  "author": "Guillaume Descoteaux-Isabelle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GuillaumeAI/x/issues"
+  },
+  "homepage": "https://github.com/GuillaumeAI/x#readme"
+}
