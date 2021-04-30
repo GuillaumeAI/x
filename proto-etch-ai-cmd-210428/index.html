@@ -2,13 +2,18 @@
    <head>
       <title>ETCH model</title>
    </head>
+   <style rel="stylesheet" type="text/css">
+.b3 {
+   font-size: xx-large;
+}
+</style>
    <body>
       <div><h1 id=titlehead>
          TITLE - Teachable Machine Audio Model
       </h1>
       </div>
 
-      <button type="button" onclick="init()">Start</button><button type="button" onclick="stopRecognition()">Stop</button>
+      <button type="button" onclick="init()" class="b3">Start</button><button type="button" onclick="stopRecognition()" class="b3">Stop</button>
       <table>
          <tr>
             <td>
@@ -16,7 +21,7 @@
 
             </td>
             <td>
-               <h1>Last recognized class: <div id="label-last">NONE SO FAR</div></h1>
+               <h1 id="label-context">Context: <div id="label-last">NONE SO FAR</div></h1>
             </td>
          </tr>
       </table>
