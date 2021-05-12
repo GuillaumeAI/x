@@ -1,5 +1,6 @@
 
-
+#SAMPLE
+#make_album stylized gal2 "JG AI Prod" "Copyright Guillaume Descoteaux-Isabelle, (2021) - David B.G. (n.d.)" "Experimentation of JG AI Style on David's work"
 
 make_album()
 {
