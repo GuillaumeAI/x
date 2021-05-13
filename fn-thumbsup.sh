@@ -10,7 +10,7 @@ make_album()
     title="$3"
     footer="$4"
     toplevelsitename="$5"
-
+    homealbumname="$6"
 
     thumbsup --input $1 --output $2 \
       --thumb-size 140 \
@@ -21,6 +21,7 @@ make_album()
       --title "$title" \ 
       --footer "$footer" \
       --home-album-name  "$toplevelsitename" \
+      --home-album-name "$homealbumname" \
       --cleanup 
 
 }
