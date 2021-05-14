@@ -10,3 +10,10 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt install graphicsmagick -y
 RUN npm i thumbsup --g
 RUN apt install exiftool -y
+WORKDIR /root
+COPY build/home/ .
+WORKDIR /a/bin
+COPY build/bin/ .
+WORKDIR /work
+
+#ENTRYPOINT ["/usr/local/bin/thumbsup",]
