@@ -1,0 +1,12 @@
+model_cezanne
+model_el-greco
+model_gauguin
+model_kirchner
+model_monet
+model_morisot
+model_munch
+model_peploe
+model_picasso
+model_pollock
+model_roerich
+model_van-gogh
