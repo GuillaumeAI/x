@@ -16,7 +16,7 @@ m=$1
 
 export modelnameonly="${m/$replacerstr/$secondString}"
 
-export container_tag="guillaumeai/ast:$modelnameonly"
+export container_tag="guillaumeai/ast:$modelnameonly-lic"
 
 # cleanup and tar copy the target model
 if [ "$2" == "" ]; then # nocache
