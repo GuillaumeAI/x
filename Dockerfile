@@ -15,5 +15,5 @@ COPY build/home/ .
 WORKDIR /a/bin
 COPY build/bin/ .
 WORKDIR /work
-
+USER ubuntu
 #ENTRYPOINT ["/usr/local/bin/thumbsup",]
