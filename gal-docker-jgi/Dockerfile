@@ -8,3 +8,13 @@ ARG GID=1000
 RUN groupadd -g $GID -o $UNAME
 RUN useradd -m -u $UID -g $GID -o -s /bin/bash $UNAME
 USER $UNAME
+
+USER root
+#RUN chown -R jgi.jgi /tools /a/bin
+RUN chown -R jgi.jgi /tools
+
+WORKDIR /work
+
+
+USER $UNAME
+

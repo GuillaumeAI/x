@@ -1,5 +1,13 @@
 #!/bin/bash
 
+
+################## Watcher Build #######################
+# This file is ran by the watcher when a file changes
+
+
+
+
+
 cdir=$(pwd)
 bdir=$cdir/build
 distdir=$cdir/dist

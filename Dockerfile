@@ -11,16 +11,22 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt install graphicsmagick -y
 RUN npm i npm --g
 RUN npm i yarn --g
-RUN yarn add better-sqlite3@7.4.0 -g
-RUN yarn add thumbsup -g
 RUN apt install exiftool -y #now in parent container
+# RUN yarn --version && sleep 4
+RUN yarn global add better-sqlite3@7.4.0
+RUN yarn global add thumbsup 
 
-RUN npm i gia-ast --g
+RUN yarn global add gia-ast-util
+RUN yarn global add gia-ast
 
 WORKDIR /root
 COPY build/home/ .
-WORKDIR /a/bin
-COPY build/bin/ .
+#WORKDIR /a/bin
+#COPY build/bin/ .
+
+WORKDIR /tools
+COPY build/home/ .
+
 WORKDIR /work
 
 # ARG UNAME=jgi
