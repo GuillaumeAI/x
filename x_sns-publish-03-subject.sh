@@ -6,10 +6,12 @@ if [ "$1" == "" ] || [ "$2" == "" ] ; then echo "usage: $0 <subject> <message" ;
 
 read -r -d '' MSGCONTENT << MSG
 ##############################################################
-#							     #
+#
 #  $2
-#							     #
+#
 ##############################################################
+#
+#
 MSG
 
 aws sns publish --topic-arn  $tarn --subject "$1" --message "$MSGCONTENT"
