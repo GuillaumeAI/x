@@ -1,0 +1,2 @@
+#
+snsdefaulttopic=x__aws_cli__sns__210522
