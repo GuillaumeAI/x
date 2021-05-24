@@ -1,0 +1,10 @@
+SDIR=data
+DDIR=dist
+WDIR=build
+HTML2MARKDOWNBIN=./html2markdown.js
+SNOTEPAGE=https://app.simplenote.com/p/9PyP63
+PART2NAME=part2.md
+STCBASE=buts
+TODAYFILENAME=today.md
+YESTERDAYFILENAME=yesterday.md
+TOMORROYFILENAME=tomorrow.md
