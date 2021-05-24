@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/GuillaumeAI/x/issues"
   },
-  "homepage": "https://github.com/GuillaumeAI/x#readme"
+  "homepage": "https://github.com/GuillaumeAI/x#readme",
+  "dependencies": {
+    "html2markdown": "^1.1.0"
+  }
 }
