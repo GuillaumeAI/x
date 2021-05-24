@@ -2,6 +2,7 @@
 
 dttagday=$(date +'%y%m%d')
 dtday=$(date +'%y-%m-%d')
+#dtday="21-05-25"
 #@STCGoal Sync latest
 if [ "$1" == "" ] ; then 
   curl https://app.simplenote.com/p/9PyP63 --output _TMP_buts.html
