@@ -87,10 +87,10 @@ while read l; do
   fi
 
 done <$tmphtml
-#@state We have $stcfilehtml without header etc
+#@state We have a cleared HTML file ready to CONVERT
 
 echo "--------Processing to convert to MD--------"
-
+#@a converted HTML TO a Markdown file
 $HTML2MARKDOWNBIN > $stcfilemd
 lvar HTML2MARKDOWNBIN stcfilemd
 #rm _TMP_$stcfilehtml
@@ -120,34 +120,48 @@ while read l; do
     log "-------------"
     #lvar c cs v a cr 
 
-  twdir=$wdir/by-chart/chart-$c
-  mkdir -p $twdir
-  stcfile=$wdir/stc-$c.md
-  lvar twdir stcfile
-  if [ "$cs" == "v" ]; then #@v
-  #@a
-    echo "$l" >> $twdir/v.md
-    echo "$l" >> $stcfile
-    v+=$' \n'"$l"
-    else if [ "$cs" == "a" ]; then
-    echo "$l" >> $twdir/a.md
-    echo "$l" >> $stcfile
-    a+=$' \n'"$l"
-    else if [ "$cs" == "cr" ]; then #@CR
-      echo "$l" >> $twdir/cr.md
-    echo "$l" >> $stcfile
-      cr+=$' \n'"$l"
 
-  fi;fi;fi
+  #@STCGoal Separated elements pf charts by chart folder
+    twdir=$wdir/by-chart/chart-$c
+    mkdir -p $twdir
+    stcfile=$wdir/stc-$c.md
+    lvar twdir stcfile
+    if [ "$cs" == "v" ]; then #@v
+    #@a
+      echo "$l" >> $twdir/v.md
+      echo "$l" >> $stcfile
+      v+=$' \n'"$l"
+      else if [ "$cs" == "a" ]; then
+      echo "$l" >> $twdir/a.md
+      echo "$l" >> $stcfile
+      a+=$' \n'"$l"
+      else if [ "$cs" == "cr" ]; then #@CR
+        echo "$l" >> $twdir/cr.md
+      echo "$l" >> $stcfile
+        cr+=$' \n'"$l"
 
+    fi;fi;fi
 
-#@a a DT.md file of today with the Goal
-  if  [[ "$l" == *"$today"* ]];  then
-      echo "$v  " >> $todayfilepath
-      echo "$l" >> $todayfilepath
-  fi
-  mix="$v"$'\n\n'"$a"$'\n\n'"$cr"
-  arr[${#arr[@]}]="$mix"
+#tomorrow 
+
+  #@a a DT.md file of tomorrow with the Goal
+    if  [[ "$l" == *"$tomorrow"* ]];  then
+        echo "$v  " >> $tomorrowfilepath
+        echo "$l" >> $tomorrowfilepath
+    fi
+  #@a a DT.md file of today with the Goal
+    if  [[ "$l" == *"$today"* ]];  then
+        echo "$v  " >> $todayfilepath
+        echo "$l" >> $todayfilepath
+    fi
+
+  #@a a DT.md file of yesterday with the Goal
+    if  [[ "$l" == *"$yesterday"* ]];  then
+        echo "$v  " >> $yesterdayfilepath
+        echo "$l" >> $yesterdayfilepath
+    fi
+    mix="$v"$'\n\n'"$a"$'\n\n'"$cr"
+    arr[${#arr[@]}]="$mix"
 
 done <$stcfilemd
 
@@ -157,7 +171,7 @@ log_notice "@STCGoal get out daily work todo Ended "
 # A file another way, why ??
 c=1
 bdir=$wdir/by-someway
-exit
+
 mkdir -p $bdir
 
 for a in "${arr[@]}"; do
@@ -178,6 +192,12 @@ done
 
 lvar todayfilepath
 cp $todayfilepath $ddir
+cp $yesterdayfilepath $ddir
+cp $tomorrowfilepath $ddir
+tldir=$ddir/../tl ; mkdir -p $tldir
+cp $todayfilepath $tldir/$today.md
+#cp $yesterdayfilepath $tldir/$yesterday.md
+cp $tomorrowfilepath $tldir/$tomorrow.md
 
 #clean
 rmdir $wdir/* &> /dev/null
