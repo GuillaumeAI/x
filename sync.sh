@@ -111,27 +111,28 @@ lvar HTML2MARKDOWNBIN stcfilemd
 #rm _TMP_$stcfilehtml
 
 
-#@STCGoal get out daily work todo
+#@STCGoal get out daily work todo with yesterday and tomorrow
 cs=none
 c=0
 arr=()
 while read l; do
   if  [[ "$l" == *"@v"* ]];  then #@v
-    cs=v
-    v=$'\n----\n'
-    c=$(expr $c + 1 )
-    lvar c cs v
-    a=""
-    cr=""
+      cs=v
+      v=$'\n----\n'
+      c=$(expr $c + 1 )
+      lvar c cs v
+      a=""
+      cr=""
     else if  [[ "$l" == *"@a"* ]];  then  #@a
-    cs=a
-    a=$'\n----\n'
-    lvar c cs a
+            cs=a
+            a=$'\n----\n'
+            lvar c cs a
     else if  [[ "$l" == *"@CR"* ]];  then #@CR
-    cs=cr
-    cr=$'\n----\n'
-    lvar c cs cr
+            cs=cr
+            cr=$'\n----\n'
+            lvar c cs cr
     fi;fi;fi
+    #@state We know in which section we are (v|a|CR)
     log "-------------"
     #lvar c cs v a cr 
 
@@ -147,31 +148,31 @@ while read l; do
       echo "$l" >> $stcfile
       v+=$' \n'"$l"
       else if [ "$cs" == "a" ]; then
-      echo "$l" >> $twdir/a.md
-      echo "$l" >> $stcfile
-      a+=$' \n'"$l"
+              echo "$l" >> $twdir/a.md
+              echo "$l" >> $stcfile
+              a+=$' \n'"$l"
       else if [ "$cs" == "cr" ]; then #@CR
-        echo "$l" >> $twdir/cr.md
-      echo "$l" >> $stcfile
-        cr+=$' \n'"$l"
+              echo "$l" >> $twdir/cr.md
+              echo "$l" >> $stcfile
+              cr+=$' \n'"$l"
 
     fi;fi;fi
 
 #tomorrow 
 
   #@a a DT.md file of tomorrow with the Goal
-    if  [[ "$l" == *"$tomorrow"* ]];  then
+    if  [[ "$l" == *"$tomorrow"* ]] && [ "$cs" != "cr" ] && [ "$cs" != "v" ] ;  then
         echo "$v  " >> $tomorrowfilepath
         echo "$l" >> $tomorrowfilepath
     fi
   #@a a DT.md file of today with the Goal
-    if  [[ "$l" == *"$today"* ]];  then
+    if  [[ "$l" == *"$today"* ]] && [ "$cs" != "cr" ] && [ "$cs" != "v" ] ;  then
         echo "$v  " >> $todayfilepath
         echo "$l" >> $todayfilepath
     fi
 
   #@a a DT.md file of yesterday with the Goal
-    if  [[ "$l" == *"$yesterday"* ]];  then
+    if  [[ "$l" == *"$yesterday"* ]] && [ "$cs" != "cr" ] && [ "$cs" != "v" ] ;  then
         echo "$v  " >> $yesterdayfilepath
         echo "$l" >> $yesterdayfilepath
     fi
