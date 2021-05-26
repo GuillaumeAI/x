@@ -28,6 +28,10 @@ sdir=$SYNCDIR/$SDIR
 wdir=$SYNCDIR/$WDIR
 ddir=$SYNCDIR/$DDIR
 lvar sdir wdir ddir
+
+#@STCGoal an Archives of my goals
+
+
 rm -rf $wdir $ddir
 mkdir -p $wdir
 mkdir -p $sdir
@@ -215,14 +219,37 @@ rmdir $wdir/* &> /dev/null
 #@STCGoal Distributable results
 
 cd $cdir
-cd $ddir || exit 1
-du * | awk '/.md/ { print "* ["$2"]("$2")" }' > README.md
-echo "<hr>">> README.md
-du -a stc | awk '/.md/ { print "* ["$2"]("$2")" }' | sort >> README.md
-echo "<hr>">> README.md
-
 export onlinedistrootrepo=/a/src/buts/docs
+archns=arch
+todayarchivesroot=$onlinedistrootrepo/$archns
+todayrelpath=$archns/$today
+todayarchives=$todayarchivesroot/$today
+mkdir -p  $todayarchives
+cd $onlinedistrootrepo
+git add $todayrelpath/* &> /dev/null
+sleep 1
+tar cf - * | (cd $todayarchives;tar xf -)
+rm -rf  $todayarchives/$archns #cleanup subdir arch
+git pull
+git commit $todayrelpath -m "arch:$today" && git push
 
+cd $cdir
+cd $ddir || exit 1
+du * | awk '/.md/ { print "## ["$2"]("$2")\n" }' > README.md
+echo "<hr>">> README.md
+du -a stc | awk '/.md/ { print "* ["$2"]("$2")\n" }' | sort >> README.md
+echo "<hr>">> README.md
+sed -i 's/\.md\]/\]/g' README.md #Clean link name
+sed -i 's/\[stc\//\[/g' README.md #Clean link name
+echo "  " >> README.md
+echo "----" >> README.md
+echo "  " >> README.md
+echo "[ARCH](arch/README.md)" >> README.md
+cd $todayarchivesroot
+mkdir -p $ddir/$archns
+for d in * ; do echo "[$d]($d/README.md)" >> $ddir/$archns/README.md ; done
+sleep 1
+cd $ddir 
 tar cf - * | \
   (cd $onlinedistrootrepo && pwd && tar xf - && \
   git add * &> /dev/null;git commit . -m "dist" &> /dev/null; git push &>/dev/null)
