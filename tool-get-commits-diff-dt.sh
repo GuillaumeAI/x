@@ -1,11 +1,18 @@
 
+cdir=$(pwd)
 # get a view of what changed 
 dttag=$(date +'%y%m%d%H%M%S')
 ytag="$(date +'%y-')"
-(cd $onlinedistrootrepo; commits=$(git log README.md| awk '/commit/ { print $2 }'); for c in "$commits" ; do git diff $c  | grep "* $(date +'%y-')" | grep "++" | sed -e 's/\+\+//g';done ) > $dttag.diff.txt
+cd $onlinedistrootrepo
+commits=$(git log README.md| awk '/commit/ { print $2 }')
+
+for c in "$commits" ; do 
+git diff $c  | grep "* $(date +'%y-')" | grep "++" | sed -e 's/\+\+//g'>> $cdir/$dttag.diff.txt
+done  
          
-        
+cd $cdir        
 cat $dttag.diff.txt | more
+
 
 
 
