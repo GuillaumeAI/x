@@ -29,13 +29,7 @@ wdir=$SYNCDIR/$WDIR
 ddir=$SYNCDIR/$DDIR
 lvar sdir wdir ddir
 
-#@STCGoal an Archives of my goals
 
-
-rm -rf $wdir $ddir
-mkdir -p $wdir
-mkdir -p $sdir
-mkdir -p $ddir
 
 part2file=$wdir/$PART2NAME
 stcfilebase=$wdir/$STCBASE
@@ -43,6 +37,15 @@ stcfilehtml=$stcfilebase.html
 stcfilemd=$stcfilebase.md
 tmphtml=$wdir/_TMP_$STCBASE.html
 lvar part2file stcfilebase stcfilehtml stcfilemd tmphtml
+
+#@STCGoal an Archives of my goals
+previoushtml=/tmp/sync_previous__TMP_$STCBASE.html
+cp build/_TMP_buts.html $previoushtml &> /dev/null #Know if we got changes 
+rm -rf $wdir $ddir
+mkdir -p $wdir
+mkdir -p $sdir
+mkdir -p $ddir
+
 
 yesterdayfilepath=$wdir/$YESTERDAYFILENAME
 todayfilepath=$wdir/$TODAYFILENAME
@@ -52,11 +55,16 @@ bychartname=by-chart
 bychartwdir=$wdir/$bychartname
 
 lvar yesterdayfilepath todayfilepath tomorrowfilepath
-
+export GOTCHANGES=0
 #@STCGoal Sync latest
 if [ "$1" != "--skip" ]  || [ "$2" != "--skip" ]; then
   log_status "Refreshing data started" INFO
   curl $SNOTEPAGE --output $tmphtml --silent && log_success "Data refreshed" || log_failed "Data did not refresh"
+  if [ "$1" == "--onlynew" ]; then
+    export tstgotchanges=$(diff $tmphtml $previoushtml || exit 1 )
+    (has_value tstgotchanges || exit 1) && msg_info "Changes detected" || (msg_alert "No changes detected...exiting" ; msg_info "use noargs to process anyway";exit 1) || exit 1
+  fi
+  sleep 1
   log_info "Cleaning $sdir"
   rm -rf $sdir/  &> /dev/null && log_success "Data cleared" || log_warning "Data were not cleared"
   # ||(echo "could not remove $sdir data" &&  exit 1)
@@ -228,10 +236,10 @@ mkdir -p  $todayarchives
 cd $onlinedistrootrepo
 git add $todayrelpath/* &> /dev/null
 sleep 1
-tar cf - * | (cd $todayarchives;tar xf -)
+tar cf - * | (cd $todayarchives;sleep 1;tar xf -)
 rm -rf  $todayarchives/$archns #cleanup subdir arch
-git pull
-git commit $todayrelpath -m "arch:$today" && git push
+git pull&> /dev/null
+git commit $todayrelpath -m "arch:$today" &> /dev/null&& git push&> /dev/null
 
 cd $cdir
 cd $ddir || exit 1
@@ -250,9 +258,16 @@ mkdir -p $ddir/$archns
 for d in * ; do echo "[$d]($d/README.md)" >> $ddir/$archns/README.md ; done
 sleep 1
 cd $ddir 
+echo "  " >> README.md
+echo "----" >> README.md
+echo "  " >> README.md
+echo "[Yesterday](yesterday.md)" >> README.md
+echo "[Tomorrow](tomorroy.md)" >> README.md
 tar cf - * | \
-  (cd $onlinedistrootrepo && pwd && tar xf - && \
+  (cd $onlinedistrootrepo && sleep 1 && pwd && tar xf - && \
   git add * &> /dev/null;git commit . -m "dist" &> /dev/null; git push &>/dev/null)
 
 cd $cdir
 echo DONE
+echo "Read this online at : https://jgwill.github.io/buts/"
+$binroot/sns-publish.sh "Buts updated:" "Read this online at : https://jgwill.github.io/buts/" &> /dev/null
