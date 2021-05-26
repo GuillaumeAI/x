@@ -44,6 +44,9 @@ yesterdayfilepath=$wdir/$YESTERDAYFILENAME
 todayfilepath=$wdir/$TODAYFILENAME
 tomorrowfilepath=$wdir/$TOMORROYFILENAME
 
+bychartname=by-chart
+bychartwdir=$wdir/$bychartname
+
 lvar yesterdayfilepath todayfilepath tomorrowfilepath
 
 #@STCGoal Sync latest
@@ -122,7 +125,7 @@ while read l; do
 
 
   #@STCGoal Separated elements pf charts by chart folder
-    twdir=$wdir/by-chart/chart-$c
+    twdir=$bychartwdir/chart-$c
     mkdir -p $twdir
     stcfile=$wdir/stc-$c.md
     lvar twdir stcfile
@@ -191,6 +194,9 @@ done
 # log_notice "Ended A file another way, why ?"
 
 lvar todayfilepath
+rmdir $wdir/* &> /dev/null 
+rmdir $wdir/**/* &> /dev/null 
+
 cp $todayfilepath $ddir
 cp $yesterdayfilepath $ddir
 cp $tomorrowfilepath $ddir
@@ -199,6 +205,27 @@ cp $todayfilepath $tldir/$today.md
 #cp $yesterdayfilepath $tldir/$yesterday.md
 cp $tomorrowfilepath $tldir/$tomorrow.md
 
+cp -r $bychartwdir $ddir/$bychartname
+mkdir -p $ddir/stc
+cp $wdir/stc* $ddir/stc
+
 #clean
 rmdir $wdir/* &> /dev/null
+
+#@STCGoal Distributable results
+
+cd $cdir
+cd $ddir || exit 1
+du * | awk '/.md/ { print "* ["$2"]("$2")" }' > README.md
+echo "<hr>">> README.md
+du -a stc | awk '/.md/ { print "* ["$2"]("$2")" }' | sort >> README.md
+echo "<hr>">> README.md
+
+export onlinedistrootrepo=/a/src/buts/docs
+
+tar cf - * | \
+  (cd $onlinedistrootrepo && pwd && tar xf - && \
+  git add * &> /dev/null;git commit . -m "dist" &> /dev/null; git push &>/dev/null)
+
+cd $cdir
 echo DONE

@@ -21,6 +21,7 @@
   "homepage": "https://github.com/GuillaumeAI/x#readme",
   "dependencies": {
     "dotenv": "^10.0.0",
+    "gixdeko": "^0.0.8",
     "html2markdown": "^1.1.0"
   }
 }
