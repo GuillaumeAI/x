@@ -7,6 +7,7 @@ fi
 LOG_FILE=log/sync.log
 LOG_ENABLED=y
 DEBUG=1
+cdir=$(pwd)
 mkdir -p log
 msg "STC Syng Starting"
 log_status "----------STARTED----" INFO
@@ -236,7 +237,7 @@ todayarchives=$todayarchivesroot/$today
 mkdir -p  $todayarchives
 cd $onlinedistrootrepo
 git add $todayrelpath/* &> /dev/null
-sleep 1
+sleep 2
 tar cf - * | (cd $todayarchives;sleep 1;tar xf -)
 rm -rf  $todayarchives/$archns #cleanup subdir arch
 git pull&> /dev/null
@@ -251,24 +252,34 @@ echo "<hr>">> README.md
 sed -i 's/\.md\]/\]/g' README.md #Clean link name
 sed -i 's/\[stc\//\[/g' README.md #Clean link name
 echo "  " >> README.md
-echo "----" >> README.md
 echo "  " >> README.md
-echo "[ARCH](arch/README.md)" >> README.md
 cd $todayarchivesroot
 mkdir -p $ddir/$archns
 for d in * ; do echo "[$d]($d/README.md)" >> $ddir/$archns/README.md ; done
-sleep 1
 cd $ddir 
 echo "  " >> README.md
 echo "----" >> README.md
 echo "  " >> README.md
+echo "[ARCH](arch/README.md)" >> README.md
+echo " - " >> README.md
 echo "[Yesterday](yesterday.md)" >> README.md
+echo " - " >> README.md
 echo "[Tomorrow](tomorroy.md)" >> README.md
+echo " - " >> README.md
+echo "[Diff](diff.md)" >> README.md
+
+cd $cdir
+$cdir/tool-get-commits-diff-dt.sh > $ddir/diff.md
+
+sleep 1
+cd $ddir
 tar cf - * | \
   (cd $onlinedistrootrepo && sleep 1 && pwd && tar xf - && \
   git add * &> /dev/null;git commit . -m "dist" &> /dev/null; git push &>/dev/null)
 
 cd $cdir
+
+
 echo DONE
 echo "Read this online at : https://jgwill.github.io/buts/"
 $binroot/sns-publish.sh "Buts updated:" "Read this online at : https://jgwill.github.io/buts/" &> /dev/null
