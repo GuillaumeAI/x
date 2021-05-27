@@ -1,4 +1,6 @@
 
+export onlinedistrootrepo=/a/src/buts/docs
+
 cdir=$(pwd)
 # get a view of what changed 
 dttag=$(date +'%y%m%d%H%M%S')
@@ -7,22 +9,24 @@ cd $onlinedistrootrepo
 commits=$(git log README.md| awk '/commit/ { print $2 }')
 echo "$commits" > $cdir/latest-commits.txt
 
+latestcommit=""
 for c in "$commits" ; do 
-git diff $c  | grep "* $(date +'%y-')" | grep "++" | sed -e 's/\+\+//g'>> $cdir/$dttag.diff.txt
+  git diff $c  | grep "* $(date +'%y-')" | grep "++" | sed -e 's/\+\+//g'>> $cdir/$dttag.diff.txt
+  if [ "$latestcommit" == "" ]; then latestcommit="$c"; fi
 done  
          
 cd $cdir     
 
-echo "------------TODAY------DIFF---------"
-(cd $onlinedistrootrepo; git diff a6c9fc336975e1ec21c224c1d8173594e445ac48 today.md)
+echo "------------TODAY------DIFF---------  "
+(cd $onlinedistrootrepo; git diff $latestcommit today.md)
 
-echo "------------YESTERDAY------DIFF---------"
-(cd $onlinedistrootrepo; git diff a6c9fc336975e1ec21c224c1d8173594e445ac48 yesterday.md)
+echo "------------YESTERDAY------DIFF---------  "
+(cd $onlinedistrootrepo; git diff $latestcommit yesterday.md)
 
-echo "------------TOMORROW------DIFF---------"
-(cd $onlinedistrootrepo; git diff a6c9fc336975e1ec21c224c1d8173594e445ac48 tomorrow.md)
+echo "------------TOMORROW------DIFF---------  "
+(cd $onlinedistrootrepo; git diff $latestcommit tomorrow.md)
 
-cat $dttag.diff.txt | more
+#cat $dttag.diff.txt | more
 
 
 
