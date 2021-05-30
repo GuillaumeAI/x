@@ -1,27 +1,26 @@
 {
-  "name": "giax",
-  "version": "0.0.1",
-  "description": "DESCRIBE",
-  "main": "index.js",
+  "name": "gia-buts",
+  "version": "0.1.0",
+  "description": "Gestion des buts",
+  "main": "buts.js",
+  "directories": {
+    "doc": "docs"
+  },
   "scripts": {
-    "test": "MYTESTCMD"
+	  "loop":"bash loop_sync_update_onlynew.sh&",
+    "test": "./sync.sh --onlynew"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GuillaumeAI/x.git"
+    "url": "git+https://github.com/jgwill/buts.git"
   },
   "keywords": [
-    "gia"
+    "buts"
   ],
   "author": "Guillaume Descoteaux-Isabelle",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/GuillaumeAI/x/issues"
+    "url": "https://github.com/jgwill/buts/issues"
   },
-  "homepage": "https://github.com/GuillaumeAI/x#readme",
-  "dependencies": {
-    "dotenv": "^10.0.0",
-    "gixdeko": "^0.0.8",
-    "html2markdown": "^1.1.0"
-  }
+  "homepage": "https://github.com/jgwill/buts#readme"
 }
